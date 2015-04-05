@@ -30,7 +30,8 @@
 
     google.maps.event.addListener(marker, 'click', (function(marker, i) {
          return function() {
-             infowindow.setContent(locations[i][0]);
+             var contentString = "<p>" + locations[i][0] + " is a " + locations[i][3] + " located at " + locations[i][7] + " " +locations[i][9]+ " " + locations[i][8] + ". It is open from " + locations[i][5] + " until " + locations[i][6] + ". </p>"
+             infowindow.setContent(contentString);            
              infowindow.open(map, marker);
          }
     })(marker, i));
