@@ -4,13 +4,12 @@ class Marker < ActiveRecord::Base
 
   def self.produce_array
     results = []
-    location = []
     all_markers = Marker.all
     all_markers.each do |marker|
-      location.push([marker.name, marker.lat, marker.lng])
+      location = [marker.name, marker.lat, marker.lng]
       results.push(location)
     end
-    results
+    results.to_json
   end
 
   private
