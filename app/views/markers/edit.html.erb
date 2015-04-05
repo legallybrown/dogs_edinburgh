@@ -1,0 +1,16 @@
+<h1>Edit the Marker for <%= @marker.name %></h1>
+
+<%= form_for @marker, url: { action: "update" }, method: "put" do |f| %>
+  <p>Business Name: <%= f.text_field :name %> </p>
+  <p>Business Type: <%= f.text_field :business_type %> </p>
+  <p>Rating (1 to 10): <%= f.number_field :rating, in: 1..10 %></p>
+  <p>Building Number: <%= f.number_field :building_number %> </p>
+  <p>Postcode: <%= f.text_field :postcode %> </p>
+  <p>Street Name: <%= f.text_field :street_name %> </p>
+  <p>Opening Time: <%= f.time_select :opening_time %></p>
+  <p>Closing Time: <%= f.time_select :closing_time %></p>
+  <p>Latitude: <%= f.number_field :lat, :step => 'any' %></p>
+  <p>Longitude: <%= f.number_field :lng, :step => 'any' %></p>
+  <p>URL: <%= f.url_field :url %></p>
+  <p><%= f.submit "Update" %></p>
+<% end %>

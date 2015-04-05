@@ -17,6 +17,17 @@ class MarkersController < ApplicationController
     redirect_to :back
   end
 
+
+  def edit
+    @marker = Marker.find(params[:id])
+  end  
+
+  def update
+    @marker = Marker.find(params[:id])
+    @marker.update_attributes(marker_params)
+    redirect_to markers_path
+  end
+
   private
 
   def marker_params

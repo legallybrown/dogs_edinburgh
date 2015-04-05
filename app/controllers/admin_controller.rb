@@ -1,10 +1,6 @@
 class AdminController < ApplicationController
 
-
-  def index
-  end
-
-  def show
+  def main
   end
 
   def new

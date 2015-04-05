@@ -25,7 +25,9 @@ Rails.application.routes.draw do
   #       get 'sold'
   #     end
   #   end
-  resources :admin
+  get 'admin' => 'admin#main'
+
+
   resources :markers
 
   # Example resource route with sub-resources:

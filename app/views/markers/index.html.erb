@@ -12,8 +12,13 @@
     Opens at: <%= marker.opening_time.to_time %><br>
     Closes at: <%= marker.closing_time.to_time %><br>
     Street:<%= marker.street_name %><br>
-    Building Number<%= marker.building_number %><br>
+    Building Number: <%= marker.building_number %><br>
     Postcode: <%= marker.postcode %><br>
+    <%= button_to "Edit", edit_marker_path(marker), controller: "markers", method: 'get' %>
+
   </li>
+  <br>
+  <br>
   <% end %>
+  
 </ol>
