@@ -1,6 +1,6 @@
 class Marker < ActiveRecord::Base
   acts_as_mappable
-  before_validation :geocode_address, :on => :create
+  before_validation :geocode_address, :on => :create, :on => :update
 
   private
 

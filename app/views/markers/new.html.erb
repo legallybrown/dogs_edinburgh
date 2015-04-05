@@ -5,8 +5,8 @@
   <p>Business Type: <%= f.text_field :business_type %> </p>
   <p>Rating (1 to 10): <%= f.number_field :rating, in: 1..10 %></p>
   <p>Building Number: <%= f.number_field :building_number %> </p>
-  <p>Postcode: <%= f.text_field :postcode %> </p>
   <p>Street Name: <%= f.text_field :street_name %> </p>
+  <p>Postcode: <%= f.text_field :postcode %> </p>
   <p>Opening Time: <%= f.time_select :opening_time %></p>
   <p>Closing Time: <%= f.time_select :closing_time %></p>
   <p>Latitude: <%= f.number_field :lat, :step => 'any' %></p>
