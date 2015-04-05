@@ -2,6 +2,17 @@ class Marker < ActiveRecord::Base
   acts_as_mappable
   before_validation :geocode_address, :on => :create, :on => :update
 
+  def self.produce_array
+    results = []
+    location = []
+    all_markers = Marker.all
+    all_markers.each do |marker|
+      location.push([marker.name, marker.lat, marker.lng])
+      results.push(location)
+    end
+    results
+  end
+
   private
 
   def geocode_address
@@ -13,7 +24,4 @@ class Marker < ActiveRecord::Base
     errors.add(:address, "Could not Geocode address") if !geo.success
     self.lat, self.lng = geo.lat, geo.lng if geo.success
   end
-
-
-
 end
