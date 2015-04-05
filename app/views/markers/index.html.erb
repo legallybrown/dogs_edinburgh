@@ -1,0 +1,19 @@
+<h2>Index of Locations</h2>
+
+<ol>
+  <% @markers.each do |marker| %>
+  <li>
+    Name: <%= marker.name %><br>
+    Business Type: <%= marker.business_type %><br>
+    Website: <%= marker.url %><br>
+    LNG: <%= marker.lng %><br>
+    LAT: <%= marker.lat %><br>
+    Rating: <%= marker.rating %><br>
+    Opens at: <%= marker.opening_time.to_time %><br>
+    Closes at: <%= marker.closing_time.to_time %><br>
+    Street:<%= marker.street_name %><br>
+    Building Number<%= marker.building_number %><br>
+    Postcode: <%= marker.postcode %><br>
+  </li>
+  <% end %>
+</ol>

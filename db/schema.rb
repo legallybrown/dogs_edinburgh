@@ -14,11 +14,17 @@
 ActiveRecord::Schema.define(version: 20150404221504) do
 
   create_table "markers", force: true do |t|
-    t.string   "type"
+    t.string   "business_type"
     t.string   "name"
-    t.decimal  "lat",        precision: 10, scale: 6
-    t.decimal  "lng",        precision: 10, scale: 6
+    t.decimal  "lat",             precision: 10, scale: 6
+    t.decimal  "lng",             precision: 10, scale: 6
+    t.integer  "rating"
     t.string   "url"
+    t.time     "opening_time"
+    t.time     "closing_time"
+    t.string   "postcode"
+    t.string   "street_name"
+    t.integer  "building_number"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
