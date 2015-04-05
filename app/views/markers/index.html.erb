@@ -9,8 +9,8 @@
     LNG: <%= marker.lng %><br>
     LAT: <%= marker.lat %><br>
     Rating: <%= marker.rating %><br>
-    Opens at: <%= marker.opening_time.to_time %><br>
-    Closes at: <%= marker.closing_time.to_time %><br>
+    Opens at: <%= marker.opening_time.strftime("%H:%M") %><br>
+    Closes at: <%= marker.closing_time.strftime("%H:%M") %><br>
     Street:<%= marker.street_name %><br>
     Building Number: <%= marker.building_number %><br>
     Postcode: <%= marker.postcode %><br>

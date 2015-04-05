@@ -1,9 +1,19 @@
 class Marker < ActiveRecord::Base
-  
-  before_save :time_format
+  acts_as_mappable
+  before_validation :geocode_address, :on => :create
 
-  def time_format
-    self.opening_time.strftime('%H:%M') unless self.opening_time.blank?
-    self.closing_time.strftime('%H:%M') unless self.closing_time.blank?
-  end 
+  private
+
+  def geocode_address
+    number = self.building_number.to_s || ""
+    postcode = self.postcode || ""
+    street_name = self.street_name || ""
+    address = number + street_name + postcode
+    geo = Geokit::Geocoders::MultiGeocoder.geocode (address)
+    errors.add(:address, "Could not Geocode address") if !geo.success
+    self.lat, self.lng = geo.lat, geo.lng if geo.success
+  end
+
+
+
 end
