@@ -25,6 +25,7 @@ class MarkersController < ApplicationController
   def update
     @marker = Marker.find(params[:id])
     @marker.update_attributes(marker_params)
+    flash[:notice] = "Succesfully updated details for #{@marker.name}"
     redirect_to markers_path
   end
 

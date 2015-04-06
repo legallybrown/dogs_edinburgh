@@ -16,6 +16,8 @@ gem 'coffee-rails', '~> 4.0.0'
 
 gem 'geokit-rails'
 
+gem 'uikit-sass-rails'
+
 gem 'devise'
 
 # Use jquery as the JavaScript library

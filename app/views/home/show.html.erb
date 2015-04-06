@@ -9,7 +9,8 @@
     var myLatlng = new google.maps.LatLng(55.9532520,-3.1882670);
     var mapOptions = {
       zoom: 12,
-      center: myLatlng
+      center: myLatlng,
+      draggable: true
     }
     var locations = <%= raw Marker.produce_array %>
     console.log('locations', locations)
@@ -31,7 +32,7 @@
     google.maps.event.addListener(marker, 'click', (function(marker, i) {
          return function() {
              var contentString = "<p>" + locations[i][0] + " is a " + locations[i][3] + " located at " + locations[i][7] + " " +locations[i][9]+ " " + locations[i][8] + ". It is open from " + locations[i][5] + " until " + locations[i][6] + ". </p>"
-             infowindow.setContent(contentString);            
+             infowindow.setContent(contentString);
              infowindow.open(map, marker);
          }
     })(marker, i));

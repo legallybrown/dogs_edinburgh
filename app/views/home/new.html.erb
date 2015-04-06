@@ -1,0 +1,9 @@
+<h4>Add a Marker</h4>
+
+<%= form_for(@marker) do |f| %>
+  <%= f.string :type %>
+  <%= f.decimal :lat %>
+  <%= f.decimal :lng %>
+  <%= f.string :url %>
+  <%= f.submit "Create" %>
+<% end %>
