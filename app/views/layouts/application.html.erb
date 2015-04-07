@@ -9,6 +9,21 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <nav class="uk-navbar">
+    <a href="localhost:3000/" class="uk-navbar-brand">Edinburgh Dogs</a>
+    <ul class="uk-navbar-nav"></ul>
+    <div class="uk-navbar-content"></div>
+    <div class="uk-navbar-flip">
+      <div class="uk-navbar-content uk-navbar-right">
+        <div class="uk-navbar-content uk-hidden-small">
+          <form class="uk-form uk-margin-remove uk-display-inline-block">
+            <input type="text" placeholder="Search">
+            <button class="uk-button uk-button-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </nav>
   <p class="notice"><%= notice %></p>
   <p class="alert"><%= alert %></p>
 
