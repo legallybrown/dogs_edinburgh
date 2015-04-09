@@ -1,6 +1,6 @@
 class Marker < ActiveRecord::Base
   acts_as_mappable
-  before_validation :geocode_address, :on => :create, :on => :update
+  before_validation :geocode_address, on: [:create, :update]
 
   def self.produce_array
     results = []
