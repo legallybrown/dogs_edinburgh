@@ -47,20 +47,6 @@
            position: new google.maps.LatLng(locations[i][1], locations[i][2]),
            map: map
       });
-    if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var pos = new google.maps.LatLng(position.coords.latitude,
-                                       position.coords.longitude);
-      getNearestVenue(markers, pos)
-    }, function() {
-      handleNoGeolocation(true);
-    });
-
-  } else {
-    // Browser doesn't support Geolocation
-    handleNoGeolocation(false);
-  }
-
     google.maps.event.addListener(marker, 'click', (function(marker, i) {
          return function() {
              var contentString = "<p>" + locations[i][0] + " is a " + locations[i][3] + " located at " + locations[i][7] + " " +locations[i][9]+ " " + locations[i][8] + ". It is open from " + locations[i][5] + " until " + locations[i][6] + ". </p>"
@@ -69,7 +55,21 @@
          }
     })(marker, i));
   markers.push(marker);
-  }  
+  }
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = new google.maps.LatLng(position.coords.latitude,
+                                       position.coords.longitude);
+      getNearestVenue(markers, pos)
+      getFiveNearestVenues(markers, pos)
+    }, function() {
+      handleNoGeolocation(true);
+    });
+
+  } else {
+    // Browser doesn't support Geolocation
+    handleNoGeolocation(false);
+  }
 }
 
 function getNearestVenue(markers, pos) {
@@ -92,8 +92,35 @@ function getNearestVenue(markers, pos) {
     distance_in_miles = (closest.distance * 0.000621371192).toFixed(2)
 
     $('#sidebar').html(" Closest Venue: " + closest.marker.title + ' ' + distance_in_miles + ' ' +  "miles away from where you are now")
-  }
+  } 
 }
+
+function getFiveNearestVenues(markers, pos) {
+  console.log('getting 5 nearest')
+  if(!pos || !markers){
+    return;
+  }
+  console.log('markers before', markers)
+  var results = []
+  $.each(markers, function(){
+    var distance = google.maps.geometry.spherical.computeDistanceBetween(this.getPosition(), pos);
+    results.push({name: this.title, distance: distance})
+    return results.sort()
+  });
+  console.log('results', results)
+  nearest = results.slice(0,5)
+  console.log('nearest', nearest)
+
+  $.each(nearest, function(name, location){
+    console.log('name', name);
+    console.log('location', location);    
+    list_item = document.createElement('li');
+    list_item.innerHTML = this.name;
+    console.log('list item', list_item);
+    $('#sidebar').append(list_item);
+  })
+
+};
 
 function CenterControl(controlDiv, map) {
   // Set CSS for the control border
