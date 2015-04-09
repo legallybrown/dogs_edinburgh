@@ -25,9 +25,14 @@
     var myLatlng;
     var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     centerControlDiv = document.createElement('div');
+    findMeDiv = document.createElement('div'); 
     centerControl = new CenterControl(centerControlDiv, map)
+    findMe = new FindMe(findMeDiv, map)
     centerControlDiv.index = 1;
+    findMeDiv.index = 1;
     map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(centerControlDiv);
+    map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(findMeDiv);
+
     google.maps.event.addDomListener(window, 'resize', function() {
       myLatlng = new google.maps.LatLng(55.9532520,-3.1882670);
       map.setCenter(myLatlng)
@@ -42,7 +47,19 @@
            position: new google.maps.LatLng(locations[i][1], locations[i][2]),
            map: map
       });
+    if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = new google.maps.LatLng(position.coords.latitude,
+                                       position.coords.longitude);
+      getNearestVenue(markers, pos)
+    }, function() {
+      handleNoGeolocation(true);
+    });
 
+  } else {
+    // Browser doesn't support Geolocation
+    handleNoGeolocation(false);
+  }
 
     google.maps.event.addListener(marker, 'click', (function(marker, i) {
          return function() {
@@ -53,31 +70,9 @@
     })(marker, i));
   markers.push(marker);
   }  
-  if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var pos = new google.maps.LatLng(position.coords.latitude,
-                                       position.coords.longitude);
-      var infowindow = new google.maps.InfoWindow({
-        map: map,
-        position: pos,
-        content: 'You are here!'
-      });
-
-      map.setCenter(pos);
-      getNearestVenue(markers, pos)
-    }, function() {
-      handleNoGeolocation(true);
-    });
-
-  } else {
-    // Browser doesn't support Geolocation
-    handleNoGeolocation(false);
-  }
 }
 
 function getNearestVenue(markers, pos) {
-  console.log('markers in get nearest', markers)
-  console.log('pos in get nearest', pos)
   var closest;
   if(!pos || !markers){
     return;
@@ -94,9 +89,9 @@ function getNearestVenue(markers, pos) {
     //closest.marker will be the nearest marker, do something with it
     //here we simply trigger a click, which will open the InfoWindow 
     // google.maps.event.trigger(closest.marker,'click')
-    console.log('closest', closest)
     distance_in_miles = (closest.distance * 0.000621371192).toFixed(2)
-    $('#sidebar').html('Closest Venue: ' + closest.marker.title + " " + distance_in_miles + " miles away from where you are now")
+
+    $('#sidebar').html(" Closest Venue: " + closest.marker.title + ' ' + distance_in_miles + ' ' +  "miles away from where you are now")
   }
 }
 
@@ -129,6 +124,55 @@ function CenterControl(controlDiv, map) {
   google.maps.event.addDomListener(controlUI, 'click', function() {
     myLatlng = new google.maps.LatLng(55.9532520,-3.1882670);
     map.setCenter(myLatlng)
+  });
+};
+
+function FindMe(findMeDiv, map) {
+  // Set CSS for the control border
+  var controlUI = document.createElement('div');
+  controlUI.style.backgroundColor = '#fff';
+  controlUI.style.border = '2px solid #fff';
+  controlUI.style.borderRadius = '3px';
+  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+  controlUI.style.cursor = 'pointer';
+  controlUI.style.marginBottom = '22px';
+  controlUI.style.textAlign = 'center';
+  controlUI.title = 'Click to recenter the map';
+  findMeDiv.appendChild(controlUI);
+
+  // Set CSS for the control interior
+  var controlText = document.createElement('div');
+  controlText.style.color = 'rgb(25,25,25)';
+  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+  controlText.style.fontSize = '16px';
+  controlText.style.lineHeight = '38px';
+  controlText.style.paddingLeft = '5px';
+  controlText.style.paddingRight = '5px';
+  controlText.innerHTML = 'Find Me';
+  controlUI.appendChild(controlText);
+
+  // Setup the click event listeners: simply set the map to
+  // Edinburgh
+  google.maps.event.addDomListener(controlUI, 'click', function() {
+    if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = new google.maps.LatLng(position.coords.latitude,
+                                       position.coords.longitude);
+      var infowindow = new google.maps.InfoWindow({
+        map: map,
+        position: pos,
+        content: 'You are here!'
+      });
+      map.setCenter(pos);
+    }, function() {
+      handleNoGeolocation(true);
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleNoGeolocation(false);
+  }
+    // var pos = new google.maps.LatLng(55.9532520,-3.1882670);
+    // map.setCenter(myLatlng)
   });
 };
 
