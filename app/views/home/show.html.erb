@@ -60,7 +60,6 @@
     navigator.geolocation.getCurrentPosition(function(position) {
       var pos = new google.maps.LatLng(position.coords.latitude,
                                        position.coords.longitude);
-      getNearestVenue(markers, pos)
       getFiveNearestVenues(markers, pos)
     }, function() {
       handleNoGeolocation(true);
@@ -72,50 +71,29 @@
   }
 }
 
-function getNearestVenue(markers, pos) {
-  var closest;
-  if(!pos || !markers){
-    return;
-  }
-  $.each(markers,function(){
-    var distance=google.maps.geometry.spherical
-                  .computeDistanceBetween(this.getPosition(),pos);
-    if(!closest || closest.distance > distance){
-      closest={marker:this,
-               distance:distance}
-    }
-  });
-  if(closest){
-    //closest.marker will be the nearest marker, do something with it
-    //here we simply trigger a click, which will open the InfoWindow 
-    // google.maps.event.trigger(closest.marker,'click')
-    distance_in_miles = (closest.distance * 0.000621371192).toFixed(2)
-
-    $('#sidebar').html(" Closest Venue: " + closest.marker.title + ' ' + distance_in_miles + ' ' +  "miles away from where you are now")
-  } 
-}
-
 function getFiveNearestVenues(markers, pos) {
   console.log('getting 5 nearest')
   if(!pos || !markers){
     return;
   }
-  console.log('markers before', markers)
   var results = []
   $.each(markers, function(){
     var distance = google.maps.geometry.spherical.computeDistanceBetween(this.getPosition(), pos);
     results.push({name: this.title, distance: distance})
-    return results.sort()
+    return results
   });
-  console.log('results', results)
-  nearest = results.slice(0,5)
-  console.log('nearest', nearest)
+  results.sort(function(a,b){
+    return a.distance - b.distance;
+  })
+  console.log('results sorted?', results)
+  nearest = results.slice(0,6)
 
   $.each(nearest, function(name, location){
     console.log('name', name);
     console.log('location', location);    
     list_item = document.createElement('li');
-    list_item.innerHTML = this.name;
+    distance_in_miles = (this.distance * 0.000621371192).toFixed(2)
+    list_item.innerHTML = this.name + " " + distance_in_miles + " miles away";
     console.log('list item', list_item);
     $('#sidebar').append(list_item);
   })
