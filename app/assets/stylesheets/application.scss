@@ -1,6 +1,7 @@
 @import "uikit";
 @import "font-awesome-sprockets";
 @import "font-awesome";
+@import url("http://fonts.googleapis.com/css?family=Lato:400,300italic");
 
 /*
  * This is a manifest file that'll be compiled into application.css, which will include all the files
@@ -20,7 +21,9 @@
 
  /*= require uikit */
 
-
+body {
+  font-family: 'Lato'
+}
 #map-canvas {
   margin-left: 10px;
 }
@@ -30,6 +33,12 @@
   height: 500px;
 }
 
+.uk-navbar {
+  background: black;
+  a {
+    color: white;
+  }
+}
 
 /* Spinner */
 
