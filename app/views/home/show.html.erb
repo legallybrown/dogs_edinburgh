@@ -1,15 +1,21 @@
 <div class="uk-grid">
 
-  <div class="uk-width-5-6">
+  <div class="uk-width-4-6">
     <div id="map-canvas" style="height: 500px"></div>
   </div>
 
-  <div class="uk-width-1-6">
-    <div id="sidebar"></div>
+  <div class="uk-width-2-6">
+    <div id="sidebar">
+      <h4><i class="fa fa-map-marker"></i> Nearby Venues</h4>
+      <hr>
+      <div class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+    </div>
   </div>
 </div>
-
-
 
 
 <script>
@@ -19,7 +25,8 @@
     var mapOptions = {
       zoom: 12,
       center: myLatlng,
-      draggable: true
+      draggable: true,
+      disableDefaultUI: true
     }
     var locations = <%= raw Marker.produce_array %>
     var myLatlng;
@@ -60,6 +67,7 @@
     navigator.geolocation.getCurrentPosition(function(position) {
       var pos = new google.maps.LatLng(position.coords.latitude,
                                        position.coords.longitude);
+      $('.spinner').remove()
       getFiveNearestVenues(markers, pos)
     }, function() {
       handleNoGeolocation(true);
@@ -72,7 +80,6 @@
 }
 
 function getFiveNearestVenues(markers, pos) {
-  console.log('getting 5 nearest')
   if(!pos || !markers){
     return;
   }
@@ -85,16 +92,12 @@ function getFiveNearestVenues(markers, pos) {
   results.sort(function(a,b){
     return a.distance - b.distance;
   })
-  console.log('results sorted?', results)
   nearest = results.slice(0,6)
 
   $.each(nearest, function(name, location){
-    console.log('name', name);
-    console.log('location', location);    
     list_item = document.createElement('li');
     distance_in_miles = (this.distance * 0.000621371192).toFixed(2)
     list_item.innerHTML = this.name + " " + distance_in_miles + " miles away";
-    console.log('list item', list_item);
     $('#sidebar').append(list_item);
   })
 
@@ -153,7 +156,7 @@ function FindMe(findMeDiv, map) {
   controlText.style.lineHeight = '38px';
   controlText.style.paddingLeft = '5px';
   controlText.style.paddingRight = '5px';
-  controlText.innerHTML = 'Find Me';
+  controlText.innerHTML = '<span style="padding: 0 10px;">Find Me</span><i class="fa fa-location-arrow" style="color: rgb(79, 154, 255); padding: 0 10px;"></i>';
   controlUI.appendChild(controlText);
 
   // Setup the click event listeners: simply set the map to
