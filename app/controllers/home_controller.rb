@@ -7,7 +7,6 @@ class HomeController < ApplicationController
     @markers = Marker.all
     respond_to do |format|
       format.html do
-        return
       end
 
       format.json do

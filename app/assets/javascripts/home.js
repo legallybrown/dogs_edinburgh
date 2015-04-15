@@ -34,21 +34,24 @@ $(document).ready(function () {
         var infowindow = new google.maps.InfoWindow;
         var markers = [];
         var marker, i;
-        for (i = 0; i < locations.length; i++) {  
+        console.log('locations', locations)
+        for (i = 0; i < locations.length; i++) {
+          console.log('locations in loops', locations[i]) 
           marker = new google.maps.Marker({
-               title: locations[i][0],
-               position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+               title: locations[i].name,
+               position: new google.maps.LatLng(parseFloat(locations[i].lat), parseFloat(locations[i].lng)),
                map: map
           });
         google.maps.event.addListener(marker, 'click', (function(marker, i) {
              return function() {
-                 var contentString = "<p>" + locations[i][0] + " is a " + locations[i][3] + " located at " + locations[i][7] + " " +locations[i][9]+ " " + locations[i][8] + ". It is open from " + locations[i][5] + " until " + locations[i][6] + ". </p>"
+                 var contentString = "<p>" + locations[i].name + " is a " + locations[i].business_type + " located at " +  " " + locations[i].building_number + " " + locations[i].street_name + " " + locations[i].postcode + ". It is open from " + locations[i].opening_time + " until " + locations[i].closing_time + ". </p>"
                  infowindow.setContent(contentString);
                  infowindow.open(map, marker);
              }
         })(marker, i));
       markers.push(marker);
       }
+      console.log('markers', markers)
       if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
           var pos = new google.maps.LatLng(position.coords.latitude,
@@ -66,40 +69,30 @@ $(document).ready(function () {
     }
 
     function getFiveNearestVenues(map, markers, pos) {
-      console.log('markers at start', markers)
       if(!pos || !markers){
         return;
       }
       $.each(markers, function(){
         var distance = google.maps.geometry.spherical.computeDistanceBetween(this.getPosition(), pos);
         this.distance = distance
-        console.log('this marker', this)
       });
       markers.sort(function(a,b){
         return a.distance - b.distance;
       })
-      console.log('markers after', markers)
       nearest = markers.slice(0,6)
 
       $.each(nearest, function(){
         list_item = document.createElement('li');
         list_item.setAttribute("id", this.title);
-        console.log('list_item', list_item)
         distance_in_miles = (this.distance * 0.000621371192).toFixed(2);
-        console.log('google maps', google.maps)
-        console.log('got li by name', document.getElementById(this.title))
         list_item.innerHTML = this.title + " " + "(" + distance_in_miles + " miles away" + ")";
         $('#sidebar').append(list_item);
-        console.log('this position', this.getPosition())
       })
       markers.filter(function(marker){
-        console.log('list_item id in filter', list_item.id)
-        console.log('marker.title', marker.title)
         if (marker.title == list_item.id){var result = marker}
         return result
       })
       google.maps.event.addDomListener(document.getElementById(result.title), "click", function(ev) {
-        console.log('result', result)
         map.setCenter(result);
       });
 
