@@ -24,6 +24,18 @@
 body {
   font-family: 'Lato'
 }
+
+.fa-map-marker {
+  color: red;
+}
+
+.footer {
+  background-color: black;
+  height: 300px;
+  width: 100%;
+  margin-top: 50px;
+}
+
 #map-canvas {
   margin-left: 10px;
 }

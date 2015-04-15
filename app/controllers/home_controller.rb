@@ -4,7 +4,18 @@ class HomeController < ApplicationController
   end
 
   def show
-    @marker = Marker.all
+    @markers = Marker.all
+    respond_to do |format|
+      format.html do
+        return
+      end
+
+      format.json do
+        data = {}
+        data[:markers] = @markers
+        render :json => data
+      end
+    end
   end
 
   
