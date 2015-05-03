@@ -4,6 +4,7 @@
 
   $.get('/home/show.json').success(function(data){
     var map;
+    var markers;
     function initialize() {
       var myLatlng = new google.maps.LatLng(55.9532520,-3.1882670);
       var mapOptions = {
@@ -13,7 +14,6 @@
         disableDefaultUI: true
       }
       var locations = data.markers
-      console.log('data', data)
       var myLatlng;
       var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
       centerControlDiv = document.createElement('div');
@@ -33,9 +33,7 @@
       var infowindow = new google.maps.InfoWindow;
       var markers = [];
       var marker, i;
-      console.log('locations', locations)
       for (i = 0; i < locations.length; i++) {
-        console.log('locations in loops', locations[i]) 
         marker = new google.maps.Marker({
              title: locations[i].name,
              position: new google.maps.LatLng(parseFloat(locations[i].lat), parseFloat(locations[i].lng)),
@@ -50,7 +48,6 @@
       })(marker, i));
     markers.push(marker);
     }
-    console.log('markers', markers)
     if(navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
         var pos = new google.maps.LatLng(position.coords.latitude,
@@ -68,7 +65,8 @@
   }
 
   function getFiveNearestVenues(map, markers, pos) {
-    console.log('markers get nearest', markers)
+    var list_item;
+
     if(!pos || !markers){
       return;
     }
@@ -79,26 +77,32 @@
     markers.sort(function(a,b){
       return a.distance - b.distance;
     })
-    nearest = markers.slice(0,6)
-    console.log('nearest 5', nearest)
-
+    var nearest = markers.slice(0,6)
+    console.log('APPENDING')
     $.each(nearest, function(){
-
       list_item = document.createElement('li');
       list_item.setAttribute("id", this.title);
       distance_in_miles = (this.distance * 0.000621371192).toFixed(2);
       list_item.innerHTML = this.title + " " + "(" + distance_in_miles + " miles away" + ")";
       $('#sidebar').append(list_item);
-    })
-    markers.filter(function(marker){
-      if (marker.title == list_item.id){var result = marker}
-      return result
-    })
-    google.maps.event.addDomListener(document.getElementById(result.title), "click", function(ev) {
-      map.setCenter(result);
+      var link = getMarkerByName(nearest, this.id)
+      google.maps.event.addDomListener(list_item, "click", function() {
+        console.log('this event listenr', this.id)
+        console.log('result in event', link)
+        map.setCenter(link);
+      })
     });
-
+    
   };
+
+  function getMarkerByName(nearest, name, callback){
+    var marker;
+    nearest.forEach(function(marker){
+      if(marker.title == name){
+        return marker
+      }
+    })
+  }
 
   function CenterControl(controlDiv, map) {
     // Set CSS for the control border
@@ -181,7 +185,6 @@
     });
   };
 
-  
   google.maps.event.addDomListener(window, 'load', initialize(function(){
 
   })); 
